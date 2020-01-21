@@ -3,25 +3,25 @@ package models
 import (
 	_"database/sql"
 	"database/sql"
+	"github.com/omkz/golang-echo-blog/db"
 )
 
 type Post struct {
 	Id          string    `json:"id"`
 	Title       string    `json:"title"`
-	Description string    `json:"description"`
 	Content     string    `json:"content"`
 }
 
 var con *sql.DB
 
-func PostAll() ([]*Post, error) {
+func PostAll() ([]*Post) {
 
-	con :=con.CreateCon()
+	con = db.CreateCon()
 
 	rows, err := con.Query("select * from posts")
 
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
 	defer rows.Close()
@@ -32,13 +32,13 @@ func PostAll() ([]*Post, error) {
 		post := &Post{}
 		err := rows.Scan(&post.Id, &post.Title, &post.Content)
 		if err != nil {
-			return nil, err
+			return nil
 		}
 		posts = append(posts, post)
 	}
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil
 	}
 
-	return posts, nil
+	return posts
 }
