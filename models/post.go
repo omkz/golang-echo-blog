@@ -1,20 +1,22 @@
 package models
 
 import (
-	_"database/sql"
 	"database/sql"
+	_ "database/sql"
+	"log"
+
 	"github.com/omkz/golang-echo-blog/db"
 )
 
 type Post struct {
-	Id          string    `json:"id"`
-	Title       string    `json:"title"`
-	Content     string    `json:"content"`
+	Id      string `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
 
 var con *sql.DB
 
-func PostAll() ([]*Post) {
+func PostAll() []*Post {
 
 	con = db.CreateCon()
 
@@ -41,4 +43,18 @@ func PostAll() ([]*Post) {
 	}
 
 	return posts
+}
+
+func PostCreate(post *Post) error {
+
+	con = db.CreateCon()
+
+	_, err := con.Exec("INSERT INTO posts(title, content) VALUES (?, ?)", post.Title, post.Content)
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil
+	}
+
+	return nil
 }

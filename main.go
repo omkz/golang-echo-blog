@@ -23,6 +23,7 @@ func main() {
 	// Routes
   e.GET("/", hello)
   e.GET("/posts", controllers.GetPosts)
+  e.POST("/posts", controllers.CreatePost)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
